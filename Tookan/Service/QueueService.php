@@ -78,9 +78,9 @@ class QueueService{
 
                 $res_edit_date_task = $this->taskService->requestEditDateTask($job['job_id'], $startdate);
 
-                if($res_edit_date_task->getStatusCode() == 200){
-                    $respo = $this->taskService->requestAssignAgentToTask($bestAgentId, $job['job_id']);
-                    Log::channel('custom')->info('return requestAssignAgentToTask => ' . json_encode($respo));           
+                if($res_edit_date_task->ok()){
+                    $this->taskService->requestAssignAgentToTask($bestAgentId, $job['job_id']);
+                    Log::channel('custom')->info('return requestAssignAgentToTask => Best Agent Id = '. $bestAgentId . ' Job id = ' . $job['job_id']);           
                     break;
                 }
 
