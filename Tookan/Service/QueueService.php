@@ -44,6 +44,7 @@ class QueueService{
         Log::channel('custom')->info('call run queue');
         $this->isProcessing = true;
         $jobs = Queue::get();
+        Log::channel('custom')->info('Number of jobs is ' . Queue::count());
         foreach($jobs as $job){
             $this->processing($job);
             $job->delete();
@@ -53,7 +54,8 @@ class QueueService{
     }
 
 
-    private function processing($job){            
+    private function processing($job){ 
+        Log::channel('custom')->info('call processing => ' . json_encode($job));           
         $agents = $this->agentService->getAgentsbyJob($job);
         if(!isset($agents) || count($agents) == 0){
             return;
@@ -77,7 +79,8 @@ class QueueService{
                 $res_edit_date_task = $this->taskService->requestEditDateTask($job['job_id'], $startdate);
 
                 if($res_edit_date_task->getStatusCode() == 200){
-                    $this->taskService->requestAssignAgentToTask($bestAgentId, $job['job_id']);
+                    $respo = $this->taskService->requestAssignAgentToTask($bestAgentId, $job['job_id']);
+                    Log::channel('custom')->info('return requestAssignAgentToTask => ' . json_encode($respo));           
                     break;
                 }
 
@@ -85,6 +88,9 @@ class QueueService{
                 $startdate = $this->skipWeekend(strtotime("+1 day", $startdate));
             }
         }
+
+        Log::channel('custom')->info('return processing ');           
+
     }
 
     private function skipWeekend($date){
