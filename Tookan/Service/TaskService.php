@@ -34,8 +34,8 @@ class TaskService{
         );
 
         $res = $this->requestViewTasks($requestBody);
-        if($res->getStatusCode() == 200){
-            $data = Api::getResponseAsArray($res)['data'];
+        if($res->ok()){
+            $data = $res->json()['data'];
             return $data;
         }
         return [];

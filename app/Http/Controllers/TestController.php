@@ -6,40 +6,13 @@ use Tookan\Http\Api;
 
 class TestController extends Controller
 {
-    var $res;
-
 
     public function test(){
-        $fields = array (
-            'api_key' => '2b997be77e2cc22becfd4c66426ef504',
-            'order_id' => '654321',
-            'job_description' => 'groceries delivery',
-            'job_pickup_phone' => '+1201555555',
-            'job_pickup_name' => '7 Eleven Store',
-            'job_pickup_email' => '',
-            'job_pickup_address' => '114, sansome street, San Francisco',
-            'job_pickup_latitude' => '30.7188978',
-            'job_pickup_longitude' => '76.810296',
-            'job_pickup_datetime' => '2016-08-14 19:00:00',
-            'pickup_custom_field_template' => 'Template_1',
-            'pickup_meta_data' => 
-            array (
-              0 => 
-              array (
-                'label' => 'Price',
-                'data' => '100',
-              ),
-              1 => 
-              array (
-                'label' => 'Quantity',
-                'data' => '100',
-              ),
-            ),
-        );
-
-        return json_encode($fields, true);
+        $address = "https://maps.google.com/?q=25.225018,55.25914";
+        $axis = explode('=', $address)[1];
+        $x_y = explode(',', $axis);
+        return $x_y;
     }
-
 
     public function getAllTaskPerDay(){
         $allData = [];
@@ -47,9 +20,9 @@ class TestController extends Controller
         $total_page_count = 0;
         
         do{
-            $this->res = $this->fetchData($i++);
-            while($this->res->getStatusCode() != 200);
-            $result = Api::getResponseAsArray($this->res);
+            $res = $this->fetchData($i++);
+            while(!$res->ok());
+            $result = $res->json();
             $total_page_count = $result['total_page_count'];
             $records_per_page = $result['records_per_page'];
             if($records_per_page > 0){
@@ -73,9 +46,9 @@ class TestController extends Controller
         
         for($i = 1; $i <= $total_page ; $i++){
 
-            $this->res = $this->fetchData($i);
-            while($this->res->getStatusCode() != 200);
-            $arr = Api::getResponseAsArray($this->res)['data'];
+            $res = $this->fetchData($i);
+            while(!$res->ok());
+            $arr = $res->json()['data'];
 
 
             foreach($arr as $item){
@@ -84,12 +57,8 @@ class TestController extends Controller
                     "customer_name" => $item['job_pickup_name'],
                     "phone" => $this->getCustomerPhone($item['job_pickup_phone'])
                 ]);
-
             } 
-            
         }
-
-
 
         return $allData;
     }

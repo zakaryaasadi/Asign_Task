@@ -5,6 +5,8 @@ namespace Tookan\Service;
 use App\Models\Queue;
 use Tookan\Dependency\Singleton;
 use Tookan\DefaultValues\Api as DefaultValuesApi;
+use Illuminate\Support\Facades\Log;
+
 
 class QueueService{
     private $isProcessing;
@@ -29,7 +31,7 @@ class QueueService{
 
 
     public function addToQueue($job){
-        
+        Log::channel('custom')->info('call addToQueue => '. json_encode($job));
         if(!$this->geofenceService->isExistsGeofenceByJob($job)){
             return;
         }
@@ -39,6 +41,7 @@ class QueueService{
 
 
     public function run(){
+        Log::channel('custom')->info('call run queue');
         $this->isProcessing = true;
         $jobs = Queue::get();
         foreach($jobs as $job){
@@ -46,6 +49,7 @@ class QueueService{
             $job->delete();
         }
         $this->isProcessing = false;
+        Log::channel('custom')->info('return run queue');
     }
 
 

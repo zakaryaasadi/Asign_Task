@@ -19,9 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::middleware('json')->post('/create_task','TaskController@createTask');
-Route::middleware('json')->get('/task','TestController@getAllTaskPerDay');
+Route::post('/create_task','TaskController@createTask');
+Route::get('/task','TestController@getAllTaskPerDay');
 Route::get('/getAllTask','DedController@getAllTask');
 Route::get('/createCoupon','DedController@requestAllCoupon');
 
-//Route::get('/test','TestController@test');
+Route::get('/test','TestController@test');

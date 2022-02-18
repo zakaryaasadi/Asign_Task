@@ -16,8 +16,8 @@ class AgentService{
         foreach($geofenceDetails as $i){
             $res = $this->requestViewRegion($i['region_id']);
             
-            if($res->getStatusCode() == 200){
-                $data = Api::getResponseAsArray($res)['data'];
+            if($res->ok()){
+                $data = $res->json()['data'];
                 if(Count($data) > 0)
                     $this->addAgentToList($data[0]['fleets']);
             }

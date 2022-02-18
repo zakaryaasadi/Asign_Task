@@ -56,8 +56,8 @@ class DedController extends Controller
        for($i = 1; $i <= $total_page ; $i++){
 
            $this->res = $this->fetchData($i);
-           while($this->res->getStatusCode() != 200);
-           $arr = Api::getResponseAsArray($this->res)['data'];
+           while(!$this->res->ok());
+           $arr = $this->res->json()['data'];
 
            foreach($arr as $item){
                array_push($allData, [
