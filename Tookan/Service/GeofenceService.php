@@ -7,8 +7,13 @@ use Illuminate\Support\Facades\Log;
 class GeofenceService{
 
     public function isExistsGeofenceByJob($job){
-        Log::channel('custom')->info('call isExistsGeofenceByJob => ' . json_encode($job));
+        Log::channel('custom')->info('call isExistsGeofenceByJob...');
+
         $geofenceDetails = $job['geofence_details'];
-        return isset($geofenceDetails) && count($geofenceDetails) > 0;
+        $result = isset($geofenceDetails) && count($geofenceDetails) > 0;
+        
+        Log::channel('custom')->info('return isExistsGeofenceByJob => '. $result);
+
+        return $result;
     }
 }
