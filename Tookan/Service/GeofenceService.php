@@ -9,8 +9,7 @@ class GeofenceService{
     public function isExistsGeofenceByJob($job){
         Log::channel('custom')->info('call isExistsGeofenceByJob...');
 
-        $geofenceDetails = $job['geofence_details'];
-        $result = isset($geofenceDetails) && count($geofenceDetails) > 0;
+        $result = isset($job['geofence_details']) && count($job['geofence_details']) > 0;
         
         Log::channel('custom')->info('return isExistsGeofenceByJob => '. $result);
 
